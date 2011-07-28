@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1038.36">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 18.0px 'Gill Sans'; color: #000000}
+p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #c81505}
+p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000}
+p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #c91505}
+p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #5b6060}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco}
+span.s1 {color: #0024b9}
+span.s2 {color: #5b6060}
+span.s3 {color: #000000}
+span.s4 {color: #006f1a}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1">json and gist</p>
+<p class="p2">// if the following fails for you, please check if you have to update wslib's curl method by the one in<span class="Apple-converted-space"> </span></p>
+<p class="p2">//<span class="Apple-tab-span">	</span>json/extString-curl.scd</p>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p4">q = ();</p>
+<p class="p3"><br></p>
+<p class="p5">// set your username / password here if you wanna create personalized gists, but its optional.</p>
+<p class="p4">q.username = <span class="s1">nil</span>;</p>
+<p class="p4">q.password = <span class="s1">nil</span>;</p>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p5">////////////////////////////// get existing gists /////////////</p>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p4">q.list = <span class="s1">Gist</span>.allGistsFor(<span class="s2">"LFSaw"</span>, q.username, q.password);</p>
+<p class="p4">q.list.first.id</p>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p5">// the gist dict for the latest gist of the user "LFSaw"</p>
+<p class="p4">q.gist = <span class="s1">Gist</span>.getGist(q.list.first.id)</p>
+<p class="p4">q.gist.files.asArray.first.content</p>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p5">// the gist dict for an example gist for the OpenSynthDef world</p>
+<p class="p4">q.gist = <span class="s1">Gist</span>.getGist(1109924)</p>
+<p class="p4">q.gist.files.asArray.first.content.postln.interpret.play</p>
+<p class="p3"><br></p>
+<p class="p5">////////////////////////////// post new gists /////////////</p>
+<p class="p3"><br></p>
+<p class="p5"><span class="s3">( </span>// test</p>
+<p class="p4"><span class="s1">var</span> content = (</p>
+<p class="p6"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s4">'SynthDef.sc'</span><span class="s3">: </span>"SynthDef(\out, {Out.ar(0, FSinOsc.ar(247))})"<span class="s3">,</span></p>
+<p class="p6"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s4">'SynthDef2.sc'</span><span class="s3">: </span>"SynthDef(\out, {|a = \"12\"| var c = 'b'.kr; Out.ar(0, FSinOsc.ar(b))})"</p>
+<p class="p4">);</p>
+<p class="p7"><span class="s1">Gist</span><span class="s3">.</span>contentAsJsonString<span class="s3">(content)</span></p>
+<p class="p4">)</p>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p5"><span class="s3">( </span>// post new gist</p>
+<p class="p6"><span class="s1">var</span><span class="s3"> descr = </span>"My 44th API submittet SynthDef gist"<span class="s3">;</span></p>
+<p class="p4"><span class="s1">var</span> public = <span class="s1">true</span>;</p>
+<p class="p4"><span class="s1">var</span> content = (</p>
+<p class="p6"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s4">'SynthDef.sc'</span><span class="s3">: </span>"SynthDef(\"out\", {Out.ar(0, FSinOsc.ar(247); \\haha)})"</p>
+<p class="p4">);</p>
+<p class="p3"><br></p>
+<p class="p4">q.postGist(descr, content, public, q.username, q.password);</p>
+<p class="p4">)</p>
+</body>
+</html>
