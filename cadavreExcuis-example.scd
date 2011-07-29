@@ -1,12 +1,15 @@
-// a cadavre excuis gist setup.
+// a cadavre exquis gist setup.
 // a rudimentary example on how to use the interface to the gist cloud, hosted at github.
+// if the following fails for you, please check if you have to update wslib's curl method by the one in 
+//	json/extString-curl.scd
+
 
 // 2011 Till Bovermann
 // http://tangibleauditoryinterfaces.de 
 // http://tai-studio.org 
 // http://LFSaw.de 
 
-//////////////////// supposed you want to initiate a cadavre excuis /////////////////////////////
+//////////////////// supposed you want to initiate a cadavre exquis /////////////////////////////
 
 // this setup is based on simple cadavres with only one Ndef. Here's the place to put your Ndef. Work on it and evaluate it.
 Ndef(\gistCadavre, {SplayAz.ar(2, SinOsc.ar({LFDNoise3.ar(Rand(0.1, 0.4)).exprange(20, 200)}!20, 0, 5).tanh, spread: 2, orientation: WhiteNoise.ar.lag(LFDNoise3.ar(pi.reciprocal).exprange(0.000001, 0.001))).tanh}).fadeTime_(2).play
@@ -22,7 +25,7 @@ var content = (
 	'Ndef.scd': Ndef(\gistCadavre).asCode(true, true)
 );
 
-g = Gist.createAndPush(descr, content, isPublic, q.username, q.password);
+g = Gist.createAndPush(descr, content, isPublic, username, password);
 )
 
 // look at it in the web browser
@@ -61,7 +64,7 @@ var id = 1114384; // the cadavre's id
 var username = nil; // set your user and pasword if you want to follow forks
 var password = nil;
 
-g = Gist(id).fork(q.username, q.password);
+g = Gist(id).fork(username, password);
 )
 
 // pull content from github
