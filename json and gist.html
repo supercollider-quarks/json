@@ -12,12 +12,11 @@ p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000; min-h
 p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #c91505}
 p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000}
 p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #5b6060}
-span.s1 {color: #c81505}
-span.s2 {color: #0024b9}
-span.s3 {color: #5b6060}
-span.s4 {color: #c91505}
-span.s5 {color: #000000}
-span.s6 {color: #006f1a}
+span.s1 {color: #0024b9}
+span.s2 {color: #5b6060}
+span.s3 {color: #c91505}
+span.s4 {color: #000000}
+span.s5 {color: #006f1a}
 span.Apple-tab-span {white-space:pre}
 </style>
 </head>
@@ -26,10 +25,12 @@ span.Apple-tab-span {white-space:pre}
 <p class="p2"><br></p>
 <p class="p3">// working:</p>
 <p class="p3">// <span class="Apple-tab-span">	</span>+ list all gists for a specific user (well, currently only the first 30...)</p>
-<p class="p3">// <span class="Apple-tab-span">	</span><span class="s1">+ </span>get content of a gist by its id</p>
-<p class="p3">// <span class="Apple-tab-span">	</span><span class="s1">+ </span>edit/push gist (no file renaming, no file removal for now)</p>
-<p class="p3">// <span class="Apple-tab-span">	</span><span class="s1">+ </span>fork a gist (as long as it's not yours: It's a "feature" by github.)</p>
-<p class="p3">// <span class="Apple-tab-span">	</span><span class="s1">+ </span>delete a gist</p>
+<p class="p3">// <span class="Apple-tab-span">	</span>+ get content of a gist by its id</p>
+<p class="p3">// <span class="Apple-tab-span">	</span>+ edit/push gist (no file renaming, no file removal for now)</p>
+<p class="p3">// <span class="Apple-tab-span">	</span>+ fork a gist (as long as it's not yours: It's a "feature" by github.)</p>
+<p class="p3">// <span class="Apple-tab-span">	</span>+ delete a gist</p>
+<p class="p2"><br></p>
+<p class="p3">// I purposfully did not add the username and password to the class. If that feels annoying to you, please tell me why it is wise to do so and not to tackle security issues. Also, please tell me how I should handle auth strings in curl... I'm unsure about that currently.</p>
 <p class="p2"><br></p>
 <p class="p3">// if the following fails for you, please check if you have to update wslib's curl method by the one in<span class="Apple-converted-space"> </span></p>
 <p class="p3">//<span class="Apple-tab-span">	</span>json/extString-curl.scd</p>
@@ -38,23 +39,23 @@ span.Apple-tab-span {white-space:pre}
 <p class="p4">q = ();</p>
 <p class="p2"><br></p>
 <p class="p3">// set your username / password here if you wanna create personalized gists, but its optional.</p>
-<p class="p4">q.username = <span class="s2">nil</span>;</p>
-<p class="p4">q.password = <span class="s2">nil</span>;</p>
+<p class="p4">q.username = <span class="s1">nil</span>;</p>
+<p class="p4">q.password = <span class="s1">nil</span>;</p>
 <p class="p2"><br></p>
 <p class="p2"><br></p>
 <p class="p3">////////////////////////////// get existing gists /////////////</p>
 <p class="p2"><br></p>
 <p class="p2"><br></p>
-<p class="p4">q.list = <span class="s2">Gist</span>.allGistsFor(<span class="s3">"LFSaw"</span>, q.username, q.password);</p>
+<p class="p4">q.list = <span class="s1">Gist</span>.allGistsFor(<span class="s2">"LFSaw"</span>, q.username, q.password);</p>
 <p class="p2"><br></p>
 <p class="p3">// pretty print</p>
-<p class="p4">q.list.do(<span class="s2">_</span>.prettyprint)</p>
+<p class="p4">q.list.do(<span class="s1">_</span>.prettyprint)</p>
 <p class="p2"><br></p>
 <p class="p3">// get content for all and print them out (this micht take a long time since it does an HTTP GET for every gist...)</p>
-<p class="p4">q.list.do{<span class="s2">|gist|</span> gist.pull.prettyprint(<span class="s2">true</span>)}</p>
+<p class="p4">q.list.do{<span class="s1">|gist|</span> gist.pull.prettyprint(<span class="s1">true</span>)}</p>
 <p class="p2"><br></p>
 <p class="p2"><br></p>
-<p class="p4">{<span class="s2">|e|</span> <span class="s3">"% // %\n"</span>.postf(e, e.description); e.files.do{<span class="s2">|f|</span> <span class="s3">"\t%\n"</span>.postf(f.filename)};<span class="s3">""</span>.postln}</p>
+<p class="p4">{<span class="s1">|e|</span> <span class="s2">"% // %\n"</span>.postf(e, e.description); e.files.do{<span class="s1">|f|</span> <span class="s2">"\t%\n"</span>.postf(f.filename)};<span class="s2">""</span>.postln}</p>
 <p class="p2"><br></p>
 <p class="p3">// the gist dict for the latest gist of the user "LFSaw"</p>
 <p class="p4">q.gist = q.list.first.pull</p>
@@ -65,35 +66,35 @@ span.Apple-tab-span {white-space:pre}
 <p class="p2"><br></p>
 <p class="p2"><br></p>
 <p class="p3">// the gist dict for an example gist for the OpenSynthDef world</p>
-<p class="p4">q.gist = <span class="s2">Gist</span>(1113618).pull;</p>
+<p class="p4">q.gist = <span class="s1">Gist</span>(1113618).pull;</p>
 <p class="p4">q.gist.files.asArray.first.content;</p>
 <p class="p2"><br></p>
 <p class="p3">// open in default Browser (requires wslib &amp; osx)</p>
 <p class="p4">q.gist.html_url.openInFinder;</p>
 <p class="p2"><br></p>
 <p class="p3">// You might want to evaluate it but do so on your own risk... someone could've put a bad unixCmd in there...</p>
-<p class="p4">q.gist.files.asArray.first.content.interpret.play; <span class="s4">// start the server first...</span></p>
+<p class="p4">q.gist.files.asArray.first.content.interpret.play; <span class="s3">// start the server first...</span></p>
 <p class="p2"><br></p>
 <p class="p3">// Open Documents for each file in the gist</p>
-<p class="p4">q.gist.files.keysValuesDo{<span class="s2">|key, value|</span></p>
-<p class="p4"><span class="Apple-tab-span">	</span><span class="s2">Document</span>(key.asString, value.content)</p>
+<p class="p4">q.gist.files.keysValuesDo{<span class="s1">|key, value|</span></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="s1">Document</span>(key.asString, value.content)</p>
 <p class="p4">}</p>
 <p class="p2"><br></p>
 <p class="p3">// fork that gist but mind you, you cannot fork your own gists for now!</p>
 <p class="p4">q.forked = q.gist.fork(q.username, q.password)</p>
 <p class="p2"><br></p>
-<p class="p4">q.forked.id == q.gist.id <span class="s4">// should be different</span></p>
+<p class="p4">q.forked.id == q.gist.id <span class="s3">// should be different</span></p>
 <p class="p2"><br></p>
 <p class="p3">////////////////////////////// push new gists /////////////</p>
 <p class="p2"><br></p>
-<p class="p3"><span class="s5">( </span>// push a new gist</p>
-<p class="p5"><span class="s2">var</span><span class="s5"> descr = </span>"My very-first SuperCollider gist"<span class="s5">;</span></p>
-<p class="p4"><span class="s2">var</span> isPublic = <span class="s2">true</span>;</p>
-<p class="p4"><span class="s2">var</span> content = (</p>
-<p class="p5"><span class="s5"><span class="Apple-tab-span">	</span></span><span class="s6">'SynthDef.sc'</span><span class="s5">: </span>"SynthDef(\"out\", {Out.ar(0, FSinOsc.ar(247))})"</p>
+<p class="p3"><span class="s4">( </span>// push a new gist</p>
+<p class="p5"><span class="s1">var</span><span class="s4"> descr = </span>"My very-first SuperCollider gist"<span class="s4">;</span></p>
+<p class="p4"><span class="s1">var</span> isPublic = <span class="s1">true</span>;</p>
+<p class="p4"><span class="s1">var</span> content = (</p>
+<p class="p5"><span class="s4"><span class="Apple-tab-span">	</span></span><span class="s5">'SynthDef.sc'</span><span class="s4">: </span>"SynthDef(\"out\", {Out.ar(0, FSinOsc.ar(247))})"</p>
 <p class="p4">);</p>
 <p class="p2"><br></p>
-<p class="p4">q.gist = <span class="s2">Gist</span>.createAndPush(descr, content, isPublic, q.username, q.password);</p>
+<p class="p4">q.gist = <span class="s1">Gist</span>.createAndPush(descr, content, isPublic, q.username, q.password);</p>
 <p class="p4">)</p>
 <p class="p2"><br></p>
 <p class="p4">q.gist.delete(q.username, q.password)</p>
@@ -105,9 +106,7 @@ span.Apple-tab-span {white-space:pre}
 <p class="p4">q.gist.prettyprint</p>
 <p class="p2"><br></p>
 <p class="p3">// alter the string</p>
-<p class="p5"><span class="s5">q.gist.files[</span><span class="s6">'SynthDef.sc'</span><span class="s5">].content = </span>"SynthDef(\"out\", {Out.ar(0, LFPulse.ar(247))})"<span class="s5">;</span></p>
-<p class="p2"><br></p>
-<p class="p5"><span class="s5">q.gist[</span><span class="s6">'SynthDef.sc'</span><span class="s5">] = </span>"SynthDef(\"out\", {Out.ar(0, LFPulse.ar(247))})"<span class="s5">;</span></p>
+<p class="p5"><span class="s4">q.gist[</span><span class="s5">'SynthDef.sc'</span><span class="s4">] = </span>"SynthDef(\"out\", {Out.ar(0, LFPulse.ar(247))})"<span class="s4">;</span></p>
 <p class="p2"><br></p>
 <p class="p2"><br></p>
 <p class="p3">// if you pushed this gist with a valid uid, you're able to push back your changes:<span class="Apple-converted-space"> </span></p>
@@ -115,14 +114,14 @@ span.Apple-tab-span {white-space:pre}
 <p class="p2"><br></p>
 <p class="p2"><br></p>
 <p class="p2"><br></p>
-<p class="p3"><span class="s5">( </span>// post new anonymous gist</p>
-<p class="p5"><span class="s2">var</span><span class="s5"> descr = </span>"My anonymous GIst gist"<span class="s5">;</span></p>
-<p class="p4"><span class="s2">var</span> isPublic = <span class="s2">true</span>;</p>
-<p class="p4"><span class="s2">var</span> content = (</p>
-<p class="p5"><span class="s5"><span class="Apple-tab-span">	</span></span><span class="s6">'SynthDef.sc'</span><span class="s5">: </span>"SynthDef(\"out\", {Out.ar(0, FSinOsc.ar(247); \\haha)})"</p>
+<p class="p3"><span class="s4">( </span>// post new anonymous gist</p>
+<p class="p5"><span class="s1">var</span><span class="s4"> descr = </span>"My anonymous GIst gist"<span class="s4">;</span></p>
+<p class="p4"><span class="s1">var</span> isPublic = <span class="s1">true</span>;</p>
+<p class="p4"><span class="s1">var</span> content = (</p>
+<p class="p5"><span class="s4"><span class="Apple-tab-span">	</span></span><span class="s5">'SynthDef.sc'</span><span class="s4">: </span>"SynthDef(\"out\", {Out.ar(0, FSinOsc.ar(247); \\haha)})"</p>
 <p class="p4">);</p>
 <p class="p2"><br></p>
-<p class="p4">q.gist = <span class="s2">Gist</span>.createAndPush(descr, content, isPublic);</p>
+<p class="p4">q.gist = <span class="s1">Gist</span>.createAndPush(descr, content, isPublic);</p>
 <p class="p2"><br></p>
 <p class="p4">q.gist.id;</p>
 <p class="p4">)</p>

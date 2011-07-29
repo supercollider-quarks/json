@@ -141,6 +141,18 @@ Gist {
 					"'", 
 					"'\\''"
 				)
+				.replace(
+					";", 
+					"'\\\;'"
+				)
+				.replace(
+					"\n",
+					"\\n"
+				)
+				.replace(
+					"\t",
+					"\\t"
+				)
 				.escapeChar($").quote, (i < numCommas).if({","}, {""}))
 		});
 		
@@ -172,6 +184,18 @@ Gist {
 							.replace(
 								"'", 
 								"'\\''"
+							)
+							.replace(
+								";", 
+								"'\\\;'"
+							)
+							.replace(
+								"\n",
+								"\\n"
+							)
+							.replace(
+								"\t",
+								"\\t"
 							)
 							.escapeChar($").quote
 					}), 
@@ -208,7 +232,7 @@ Gist {
 	storeArgs { ^[id] }
 
 	prettyprint {|printContent = false|
-		"% // %\n".postf(this, this.description); 
+		"% // (%) %\n".postf(this, this.user.login, this.description); 
 		printContent.if({
 			this.files.do{|f| 
 				"[ % ]\n%\n-------\n".postf(f.filename, f.content)
