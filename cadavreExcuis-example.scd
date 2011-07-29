@@ -48,7 +48,6 @@ h.do(_.prettyprint(true))
 // copy-paste from post window and play it...
 h.last['Ndef.scd']
 
-
 // get all forks of one of the next cadavres
 h = h.choose.forks.collect{|item| Gist(item.id).pull}
 
