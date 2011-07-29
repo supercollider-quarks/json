@@ -23,11 +23,11 @@
 
 	prepareForJSonDict {
 		var newString = this.deepCopy;
-		var idxs;
+		var idxs, nullIdxs;
 		idxs = newString.getStructuredTextIndices;
 	
 	
-		idxs.do{|pairs, i| 
+		idxs.do{|pairs, i|
 			Interval(*pairs).do{|idx|
 				(newString[idx] == ${).if({newString[idx] = $(});
 				(newString[idx] == $}).if({newString[idx] = $)});
@@ -39,6 +39,16 @@
 				});
 			}
 		};
+		
+		// replace null with nil
+		nullIdxs = newString.findAll("null");
+		nullIdxs.do{|idx|
+			idxs.any{|pairs| idx.inRange(*pairs)}.if({
+				newString.overWrite("nil ", idx);
+			})
+
+		};
+
 		^newString
 	}
 
