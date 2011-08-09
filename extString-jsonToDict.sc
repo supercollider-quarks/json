@@ -1,13 +1,19 @@
 + String {
 	
-	getUnquotedTextIndices {|quoteChar = "\""|
+	getQuotedTextIndices {|quoteChar = "\""|
 		var quoteIndices;
 		
 		quoteIndices = this.findAll(quoteChar.asString);
+		// remove backquoted chars
 		quoteIndices = quoteIndices.select{|idx, i|
 			this[idx-1] != $\\
-		};
-		^((([-1] ++ quoteIndices ++ [this.size]).clump(2)) +.t [1, -1])
+		} ?? {[]};
+		
+		^quoteIndices.clump(2);
+	}
+		
+	getUnquotedTextIndices {|quoteChar = "\""|
+		^((([-1] ++ this.getQuotedTextIndices(quoteChar).flatten ++ [this.size]).clump(2)) +.t #[1, -1])
 	}
 
 	getStructuredTextIndices {

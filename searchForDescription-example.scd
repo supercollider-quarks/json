@@ -49,8 +49,8 @@ q.content = Document.allDocuments.detect{|doc| (doc.string.split($\n).first.cont
 
 
 (
-var username = nil; // set your user and pasword if you want to follow forks, edit, or let your successor be able to track your cadavre.
-var password = nil;
+var username = "LFSaw"; // set your user and pasword if you want to follow forks, edit, or let your successor be able to track your cadavre.
+var password = "gnugit";
 
 var content, description, contentDict;
 var isPublic = true;
