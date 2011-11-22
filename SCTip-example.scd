@@ -8,8 +8,8 @@ q.content = Document.allDocuments.detect{|doc| (doc.string.split($\n).first.cont
 
 
 (
-var username = "LFSaw";
-var password = "gnugit";
+var username = "";
+var password = "";
 
 var content, description, contentDict;
 var isPublic = true;
