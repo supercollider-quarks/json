@@ -9,6 +9,8 @@
 // http://tai-studio.org 
 // http://LFSaw.de 
 
+q = q ? ();
+
 
 a = Gist.allGistsFor("LFSaw", q.username, q.password).select{|gist|
 	gist.description.contains("#scTip")
@@ -26,14 +28,14 @@ b = a.first.pull
 var title;
 
 title = b.filenames.detect{|name| name.asString.contains(".scd")};
-b.files[title].content.postcs; ""
+b.files[title]["content"].postcs; ""
 )
 
 (
 // open all .scd files as new documents
 
 b.filenames.select{|name| name.asString.contains(".scd")}.do{|title|
-	Document.new("Gist(%): %".format(b.id, title), "// Gist(%)\n// by %\n// \"%\"\n// filename: %\n\n%".format(b.id, b.user.login, b.description, title, b.files[title].content)).background_(Color(0.9, 0.9, 0.9, 1.0)).syntaxColorize
+	Document.new("Gist(%): %".format(b.id, title), "// Gist(%)\n// by %\n// \"%\"\n// filename: %\n\n%".format(b.id, b.user["login"], b.description, title, b.files[title]["content"])).background_(Color(0.9, 0.9, 0.9, 1.0)).syntaxColorize
 }
 )
 
@@ -49,8 +51,8 @@ q.content = Document.allDocuments.detect{|doc| (doc.string.split($\n).first.cont
 
 
 (
-var username = "LFSaw"; // set your user and pasword if you want to follow forks, edit, or let your successor be able to track your cadavre.
-var password = "gnugit";
+var username = "Gendy"; // set your user and pasword if you want to follow forks, edit, or let your successor be able to track your cadavre.
+var password = "1number";
 
 var content, description, contentDict;
 var isPublic = true;

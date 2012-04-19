@@ -21,9 +21,9 @@ var username = nil; // set your user and pasword if you want to follow forks, ed
 var password = nil;
 var descr = "Cadavre Excuis";
 var isPublic = true;
-var content = (
-	'Ndef.scd': Ndef(\gistCadavre).asCode(true, true)
-);
+var content = Dictionary[
+	"Ndef.scd" -> Ndef(\gistCadavre).asCode(true, true)
+];
 
 g = Gist.createAndPush(descr, content, isPublic, username, password);
 )
@@ -38,21 +38,21 @@ var id = 1114384; // the cadavre's id
 g = Gist(id).pull;
 )
 
-g['Ndef.scd']
+g["Ndef.scd"]
 // copy-paste from post window and play it...
 
 
-// pull all nkown forks; takes a while to complete...
-h = g.forks.collect{|item| Gist(item.id).pull}
+// pull all known forks; takes a while to complete...
+h = g.forks.collect{|dict| Gist(dict["id"]).pull}
 
 // prettyprint them including sourcecode
-h.do(_.prettyprint(true))
+h.do(_.prettyprint(printContent: true))
 
 // copy-paste from post window and play it...
-h.last['Ndef.scd']
+h.last["Ndef.scd"]
 
 // get all forks of one of the next cadavres
-h = h.choose.forks.collect{|item| Gist(item.id).pull}
+h = h.choose.forks.collect{|item| Gist(item["id"]).pull}
 
 
 
@@ -61,7 +61,7 @@ h = h.choose.forks.collect{|item| Gist(item.id).pull}
 (
 var id = 1114384; // the cadavre's id
 // fork an existing cadavre
-var username = nil; // set your user and pasword if you want to follow forks
+var username = nil; // set your user and password if you want to follow forks
 var password = nil;
 
 g = Gist(id).fork(username, password);
@@ -71,12 +71,12 @@ g = Gist(id).fork(username, password);
 g.pull
 
 // see content
-g['Ndef.scd']
+g["Ndef.scd"]
 
 // copy-paste from post window and edit it...
 
 (
-Ndef('gistCadavre', {SplayAz.ar(2, SinOsc.ar({LFDNoise3.ar(Rand(0.1, 0.4)).exprange(200, 800)}!50, 0, 1).tanh, spread: 2, orientation: WhiteNoise.ar.lag(LFDNoise3.ar(2pi.reciprocal).exprange(0.000001, 0.001))).tanh});
+Ndef('gistCadavre', {SplayAz.ar(2, SinOsc.ar({LFDNoise3.ar(Rand(0.1, 0.4)).exprange(200, 800)}!50, 0, 1).tanh, spread: 0.1, orientation: BrownNoise.ar.lag(LFDNoise3.ar(2pi.reciprocal).exprange(0.000001, 0.001))).tanh});
 Ndef('gistCadavre').set('fadeTime', 2);
 );
 
@@ -84,11 +84,14 @@ Ndef('gistCadavre').set('fadeTime', 2);
 Ndef('gistCadavre').play
 
 // update the gist's content
-g['Ndef.scd'] = Ndef('gistCadavre').asCode(true, true);
+g["Ndef.scd"] = Ndef('gistCadavre').asCode(true, true);
+
+Gist.contentAsJsonString(g.dict)
+
 
 (
 // push updated version to server
-var username = nil; // set your user and pasword if you want to follow forks, edit, or let your successor be able to track your cadavre.
+var username = nil; // set your user and password if you want to follow forks, edit, or let your successor be able to track your cadavre.
 var password = nil;
 g.push(username, password);
 )

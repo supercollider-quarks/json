@@ -5,7 +5,7 @@ SCCode {
 	*newFromJsonDict{|dict|
 		var gist;
 		
-		gist = this.new(dict.id);
+		gist = this.new(dict["id"]);
 		gist.updateDictWith(dict);
 		
 		^gist
@@ -20,12 +20,17 @@ SCCode {
 //	}	
 	
 	init {|argID|
-		dict = ();
+		dict = Dictionary.new;
 		id = argID;	
 	}
 	
 	doesNotUnderstand {|selector ... args|
-		^dict.perform(selector, *args)
+		var result;
+		result = dict[selector.asString];
+		
+		result.isNil.if{^super.doesNotUnderstand(selector, *args)};
+		^result
+		//^dict[selector.cs].perform(selector, *args)
 	}
 	
 	
@@ -38,32 +43,16 @@ SCCode {
 //		});
 
 		dict = dict.composeEvents(aDict);
-		id = dict.id;
+		id = dict["id"];
 	}
-	
-//	*allGistsFor {|user, username, password|
-//		var options, gistDicts;
-//		
-//		options = password.notNil.if({
-//			"-u %:%".format(username, password)
-//		}, {
-//			""	
-//		});
-//				
-//		gistDicts = ("https://api.github.com/users/%/gists".format(user).curl(options: options)).jsonToDict;
-//		
-//		^gistDicts.collect{|dict|
-//			this.newFromJsonDict(dict)
-//		}
-//	}
-	
+		
 	pull {
 		var string = "http://sccode.org/%/json".format(id).curl;
 		(string == "Page not found\n").if({
 			"SCCode: something went wrong during pull".warn;
 			^this;
 		});
-		this.updateDictWith(string.jsonToDict);
+		this.updateDictWith(string.parseJson);
 	}
 
 //	fork {|username, password|
@@ -77,7 +66,7 @@ SCCode {
 //
 //		options = options + "-X POST";
 //
-//		^this.deepCopy.updateDictWith("https://api.github.com/gists/%/fork".format(id.postln).curl(options: options).jsonToDict)
+//		^this.deepCopy.updateDictWith("https://api.github.com/gists/%/fork".format(id.postln).curl(options: options).parseJson)
 //	}
 //
 //	delete {|username, password|
@@ -189,7 +178,7 @@ SCCode {
 //	
 //		options = options + "-X PATCH -d %".format(jsonString);
 //		
-//		^this.updateDictWith("https://api.github.com/gists/%".format(id).curl(options: options).jsonToDict).pull;
+//		^this.updateDictWith("https://api.github.com/gists/%".format(id).curl(options: options).parseJson).pull;
 //	}
 
 
@@ -226,7 +215,7 @@ SCCode {
 //	
 //		options = options + "-X PATCH -d %".format(jsonString);
 //		
-//		^this.newFromJsonDict("https://api.github.com/gists/%".format(id).curl(options: options).jsonToDict);
+//		^this.newFromJsonDict("https://api.github.com/gists/%".format(id).curl(options: options).parseJson);
 //	}
 	
 //	*createAndPush {|descr, content, public = true, username, password|
@@ -242,6 +231,6 @@ SCCode {
 //	
 //		options = options + "-d %".format(jsonString);
 //		
-//		^this.newFromJsonDict("https://api.github.com/gists".curl(options: options).jsonToDict);
+//		^this.newFromJsonDict("https://api.github.com/gists".curl(options: options).parseJson);
 //	}
 }

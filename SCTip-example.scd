@@ -1,6 +1,6 @@
 // write your tip into a separate document; 
 // first line should be a line-comment ("// " ++ description ++ "#scTip") such as
-// I am a dscription #scTip
+// I am a description #scTip
 
 q = ();
 
@@ -8,7 +8,7 @@ q.content = Document.allDocuments.detect{|doc| (doc.string.split($\n).first.cont
 
 
 (
-var username = "";
+var username = ""; // add your username and password here
 var password = "";
 
 var content, description, contentDict;
@@ -20,9 +20,9 @@ description = content.first[3..];
 content = content[1..].join($\n);
 
 // push as a new gist
-contentDict = (
-	'tip.scd': content
-).postln;
+contentDict = Dictionary[
+	"tip.scd" -> content
+].postln;
 
 g = Gist.createAndPush(description, contentDict, isPublic, username, password);
 

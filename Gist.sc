@@ -5,7 +5,7 @@ Gist {
 	*newFromJsonDict{|dict|
 		var gist;
 		
-		gist = this.new(dict.id);
+		gist = this.new(dict["id"]);
 		gist.updateDictWith(dict);
 		
 		^gist
@@ -20,49 +20,29 @@ Gist {
 	}	
 	
 	init {|argID|
-		dict = ();
+		dict = Dictionary.new;
 		id = argID;	
 	}
 	
 	doesNotUnderstand {|selector ... args|
-		^dict.perform(selector, *args)
+		var result;
+		result = dict[selector.asString];
+		
+		result.isNil.if{^super.doesNotUnderstand(selector, *args)};
+		^result
+		//^dict[selector.cs].perform(selector, *args)
 	}
 	
 	
 	updateDictWith {|aDict|
-//		var f;
-		
-		aDict['message'].notNil.if({
+		aDict["message"].notNil.if({
 			"Gist: Something went wrong during update, maybe wrong password? Not updating the current Gist dict".error;
 			"Message from github:".inform;
 			aDict.postln;
 			^this;
 		});
-
-//		f = {|key, oldVal, newVal|
-//			newVal.isKindOf(Array).if({
-//					oldVal = oldVal ?? {[]};
-//					oldVal.collect{|oldVal, i|
-//						
-//					}
-//			}, {
-//				newVal.isKindOf(Dictionary).if({
-//					oldVal = oldVal ?? {()};
-//					newVal.keysValuesDo{|subKey, subVal| 
-//						oldVal[subKey] = f.(subKey, oldVal[subKey], subVal)
-//					}
-//				}, {
-//					newVal.postln
-//				})
-//			})
-//		};
-
-
 		dict = dict.composeEvents(aDict);
-//		aDict.keysValuesDo{|key, val|
-//			dict[key] = f.(key, dict[key], val);
-//		};
-		id = dict.id;
+		id = dict["id"];
 	}
 	
 	*allGistsFor {|user, username, password|
@@ -74,7 +54,7 @@ Gist {
 			""	
 		});
 				
-		gistDicts = ("https://api.github.com/users/%/gists".format(user).curl(options: options)).jsonToDict;
+		gistDicts = ("https://api.github.com/users/%/gists".format(user).curl(options: options)).parseJson;
 		
 		^gistDicts.collect{|dict|
 			this.newFromJsonDict(dict)
@@ -82,7 +62,7 @@ Gist {
 	}
 	
 	pull {
-		this.updateDictWith("https://api.github.com/gists/%".format(id).curl.jsonToDict)
+		this.updateDictWith("https://api.github.com/gists/%".format(id).curl.parseJson)
 	}
 
 	fork {|username, password|
@@ -96,7 +76,7 @@ Gist {
 
 		options = options + "-X POST";
 
-		^this.deepCopy.updateDictWith("https://api.github.com/gists/%/fork".format(id.postln).curl(options: options).jsonToDict)
+		^this.deepCopy.updateDictWith("https://api.github.com/gists/%/fork".format(id.postln).curl(options: options).parseJson)
 	}
 
 	delete {|username, password|
@@ -119,11 +99,11 @@ Gist {
 	}
 	
 	at{|filename|
-		^this.files[filename].content
+		^this.files[filename]["content"]
 	}
 	
 	put{|filename, content|
-		this.files[filename].content = content
+		this.files[filename]["content"] = content
 	}
 	
 	*contentAsJsonString {|contentDict|
@@ -174,10 +154,10 @@ Gist {
 			filesDict.keysValuesDo({|key, val, i|
 				result = result ++ "%: {\n\"content\":\n %}%\n"
 					.format(key.asString.quote, 
-						val[\content].isNil.if({
+						val["content"].isNil.if({
 							"null"
 						},{
-							val[\content].replace(
+							val["content"].replace(
 								"\\", 
 								"\\\\"
 							)
@@ -204,14 +184,14 @@ Gist {
 			result = result++ "\n}";
 		};
 		
-		^("\'{\"description\": \"%\",\n\"files\": %}\'".format(dict.description, f.(dict.files)));
+		^("\'{\"description\": \"%\",\n\"files\": %}\'".format(dict["description"], f.(dict["files"])));
 			
 	}
 	
 	push {|username, password|
 		var options, jsonString;
 		
-		jsonString = this.asJsonString;
+		jsonString = this.asJsonString.postln;
 		
 		options = username.notNil.if({
 			"-u %:%".format(username, password)
@@ -221,7 +201,7 @@ Gist {
 	
 		options = options + "-X PATCH -d %".format(jsonString);
 		
-		^this.updateDictWith("https://api.github.com/gists/%".format(id).curl(options: options).jsonToDict).pull;
+		^this.updateDictWith("https://api.github.com/gists/%".format(id).curl(options: options).parseJson).pull;
 	}
 
 
@@ -232,14 +212,14 @@ Gist {
 	storeArgs { ^[id] }
 
 	prettyprint {|printContent = false|
-		"% // (%) %\n".postf(this, this.user.login, this.description); 
+		"% // (%) %\n".postf(this, this.user["login"], this.description); 
 		printContent.if({
 			this.files.do{|f| 
-				"[ % ]\n%\n-------\n".postf(f.filename, f.content)
+				"[ % ]\n%\n-------\n".postf(f["filename"], f["content"])
 			}
 		}, {
 			this.files.do{|f| 
-				"[ % ]\n".postf(f.filename)
+				"[ % ]\n".postf(f["filename"])
 			}
 		});
 		"".postln
@@ -258,7 +238,7 @@ Gist {
 //	
 //		options = options + "-X PATCH -d %".format(jsonString);
 //		
-//		^this.newFromJsonDict("https://api.github.com/gists/%".format(id).curl(options: options).jsonToDict);
+//		^this.newFromJsonDict("https://api.github.com/gists/%".format(id).curl(options: options).parseJson);
 //	}
 	
 	*createAndPush {|descr, content, public = true, username, password|
@@ -274,6 +254,6 @@ Gist {
 	
 		options = options + "-d %".format(jsonString);
 		
-		^this.newFromJsonDict("https://api.github.com/gists".curl(options: options).jsonToDict);
+		^this.newFromJsonDict("https://api.github.com/gists".curl(options: options).parseJson);
 	}
 }
